@@ -47,6 +47,8 @@ plugins:
       dbt-bigquery~=1.0.0
 
       '
+    config:
+      target_schema: public
   files:
   - name: dbt
     pip_url: git+https://gitlab.com/meltano/files-dbt.git@config-version-2
