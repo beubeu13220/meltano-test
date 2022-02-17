@@ -4,4 +4,22 @@ sources:
      schema: public
      tables:
        - name: labels
+         columns:
+           - name: label
+             tests:
+               - not_null
+           - name: reviewid
+             tests:
+               - relationships:
+                   to: source('tap-postgres', 'reviews')
+                   field: reviewid
        - name: reviews
+models:
+  - name: hist_artists_labels
+    columns:
+      - name: artist
+        tests:
+          - unique
+      - name: label
+        tests:
+          - unique

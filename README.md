@@ -72,3 +72,9 @@ meltano add transformer dbt
 ```bash
 meltano elt tap-postgres target-postgres --transform run --job_id=postgressqldbt
 ```
+
+*run dbt test*  
+Set env variables PG_PASSWORD, PG_ADDRESS, PG_PORT, PG_USERNAME, PG_DATABASE  
+```bash
+meltano invoke dbt:test
+```
