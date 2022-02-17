@@ -1,0 +1,52 @@
+version: 1
+send_anonymous_usage_stats: false
+project_id: 4d6ef4cd-c86f-4615-8328-10a1c4a1ab20
+plugins:
+  extractors:
+  - name: tap-google-analytics
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-google-analytics.git
+    config:
+      view_id": '92320289'
+      reports: extract/default_report_definition.json
+      key_file_location: root_of_project/client_secrets.json
+      start_date": '2022-02-07T00:00:00Z'
+      end_date": '2022-02-07T00:00:00Z'
+  - name: tap-postgres
+    variant: transferwise
+    pip_url: pipelinewise-tap-postgres
+    config:
+      host: localhost
+      port: 5435
+      user: postgres
+      dbname: pitchfork
+      default_replication_method: FULL_TABLE
+    select:
+    - public-reviews.reviewid
+    - public-labels.*
+  loaders:
+  - name: target-csv
+    variant: hotgluexyz
+    pip_url: git+https://github.com/hotgluexyz/target-csv.git@0.3.3
+    config:
+      delimiter: ','
+      quotechar: ''''
+  - name: target-postgres
+    variant: transferwise
+    pip_url: pipelinewise-target-postgres
+    config:
+      port: 5436
+      user: postgres
+      dbname: pitchforkloader
+      default_target_schema: public
+      batch_size_rows: 1000
+      primary_key_required: false
+  transformers:
+  - name: dbt
+    pip_url: 'dbt-core~=1.0.0 dbt-postgres~=1.0.0 dbt-redshift~=1.0.0 dbt-snowflake~=1.0.0
+      dbt-bigquery~=1.0.0
+
+      '
+  files:
+  - name: dbt
+    pip_url: git+https://gitlab.com/meltano/files-dbt.git@config-version-2
